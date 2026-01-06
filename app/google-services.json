@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "688937162820",
+    "project_id": "snowbound-riches",
+    "storage_bucket": "snowbound-riches.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:688937162820:android:6a13a60bbf1c7790bc8411",
+        "android_client_info": {
+          "package_name": "jp.co.tai"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDngnlxjKsHNEIFnweL7yiWd6MIfjTPWrg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
