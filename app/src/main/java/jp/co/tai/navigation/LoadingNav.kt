@@ -24,10 +24,10 @@ import jp.co.tai.screens.connect.SnowboundConnectionType
 import jp.co.tai.screens.connect.checkSnowConnection
 import jp.co.tai.screens.loading.LoadingScreenUi
 import jp.co.tai.screens.rules.RulesScreenUi
-import kotlinx.coroutines.delay
+import jp.co.tai.screens.start.StartManager
 
 @Composable
-fun LoadingGraph() {
+fun LoadingGraph(startManager: StartManager) {
 
     val context = LocalActivity.current as LoadingActivity
     val navController = rememberNavController()
@@ -71,8 +71,12 @@ fun LoadingGraph() {
             }
 
             LaunchedEffect(Unit) {
-                delay(2000)
-                UiSharedMemory.setScreen(UiProtocol.STUB)
+                try {
+                    startManager.startGame()
+                } catch (_: Exception) {
+                    UiSharedMemory.setScreen(UiProtocol.STUB)
+                    return@LaunchedEffect
+                }
             }
 
         }

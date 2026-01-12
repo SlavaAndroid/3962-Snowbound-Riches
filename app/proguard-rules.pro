@@ -21,3 +21,8 @@
 #-renamesourcefileattribute SourceFile
 -dontwarn android.media.LoudnessCodecController$OnLoudnessCodecUpdateListener
 -dontwarn android.media.LoudnessCodecController
+-dontoptimize
+-keep class com.android.installreferrer.** { *; }
+-keep class com.google.android.gms.ads.identifier.** { *; }
+-repackageclasses 'androidx.compose.foundation'
+-allowaccessmodification

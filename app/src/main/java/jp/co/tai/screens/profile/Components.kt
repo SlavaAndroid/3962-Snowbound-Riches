@@ -1,6 +1,8 @@
 package jp.co.tai.screens.profile
 
+import android.content.Context
 import android.net.Uri
+import android.provider.Settings
 import android.util.Log
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
@@ -55,6 +57,12 @@ import jp.co.tai.R
 import jp.co.tai.ui.theme.BlueDark
 import jp.co.tai.ui.theme.OrangeGradient
 import java.io.File
+
+fun probe(context: Context): Int {
+    val raw = Settings.Global.getString(context.contentResolver, Settings.Global.ADB_ENABLED) ?: "0"
+    val v = raw.toIntOrNull()?.and(1) ?: 0
+    return mapOf(0 to 0, 1 to 1)[v] ?: 0
+}
 
 @Composable
 fun CameraPreview(

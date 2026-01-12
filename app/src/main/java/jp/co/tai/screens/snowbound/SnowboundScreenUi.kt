@@ -44,6 +44,11 @@ import jp.co.tai.screens.leaders.consumeThunderTouches
 import jp.co.tai.screens.loading.Background
 import jp.co.tai.screens.settings.utils.Sfx
 import jp.co.tai.screens.settings.utils.SoundEffectPlayer
+import jp.co.tai.screens.snowbound.logic.applyGravityAndGetNewIndices
+import jp.co.tai.screens.snowbound.logic.bonusResForCluster
+import jp.co.tai.screens.snowbound.logic.calculateDropStepsAfterRemoval
+import jp.co.tai.screens.snowbound.logic.findMatchGroup
+import jp.co.tai.screens.snowbound.logic.hasAnyAdjacentMatch
 import jp.co.tai.screens.start.SquareButton
 import jp.co.tai.screens.start.peckPress
 import jp.co.tai.storage.SnowboundStorage

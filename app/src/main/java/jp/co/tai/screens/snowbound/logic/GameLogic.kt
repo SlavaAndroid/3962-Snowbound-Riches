@@ -1,4 +1,4 @@
-package jp.co.tai.screens.snowbound
+package jp.co.tai.screens.snowbound.logic
 
 import jp.co.tai.R
 

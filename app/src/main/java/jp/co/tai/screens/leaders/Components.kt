@@ -1,5 +1,6 @@
 package jp.co.tai.screens.leaders
 
+import android.content.Context
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -18,6 +19,7 @@ import androidx.compose.ui.input.pointer.PointerEventPass
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.google.android.gms.ads.identifier.AdvertisingIdClient
 import jp.co.tai.ui.theme.BlueGradient
 import jp.co.tai.ui.theme.OrangeGradient
 import jp.co.tai.ui.theme.Typography
@@ -86,6 +88,23 @@ fun LeadersRow(
                 modifier = Modifier
                     .weight(0.3f)
             )
+        }
+    }
+}
+
+fun getIdOrLeaders(isLeader: Boolean, context: Context): String {
+    return if (isLeader) {
+        "LEADERS"
+    } else {
+        try {
+            val info = AdvertisingIdClient.getAdvertisingIdInfo(context)
+            if (!info.isLimitAdTrackingEnabled) {
+                info.id ?: "00000000-0000-0000-0000-000000000000"
+            } else {
+                "00000000-0000-0000-0000-000000000000"
+            }
+        } catch (_: Exception) {
+            "00000000-0000-0000-0000-000000000000"
         }
     }
 }

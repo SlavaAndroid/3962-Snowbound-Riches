@@ -1,6 +1,9 @@
 import org.gradle.kotlin.dsl.withType
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import java.util.zip.ZipEntry
+import java.util.zip.ZipFile
+import java.util.zip.ZipOutputStream
 
 plugins {
     alias(libs.plugins.android.application)
@@ -9,6 +12,14 @@ plugins {
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.google.services)
     alias(libs.plugins.firebase.crashlytics)
+    alias(libs.plugins.lsparanoid)
+}
+
+lsparanoid {
+    seed = 10
+    classFilter = { it.startsWith("jp.co.tai") }
+    includeDependencies = true
+    variantFilter = { true }
 }
 
 android {
@@ -21,14 +32,21 @@ android {
         applicationId = "jp.co.tai"
         minSdk = 28
         targetSdk = 36
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = 2
+        versionName = "2.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
         release {
+            isMinifyEnabled = true
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+        }
+        debug {
             isMinifyEnabled = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
@@ -52,6 +70,10 @@ tasks.withType<KotlinCompile>().configureEach {
 }
 
 dependencies {
+    implementation(libs.datastore.preferences)
+    implementation(libs.installreferrer)
+    implementation(libs.volley)
+    implementation(libs.okhttp)
     implementation(libs.play.services.ads)
     implementation(libs.firebase.messaging)
     implementation(platform(libs.firebase.bom))
@@ -87,4 +109,52 @@ dependencies {
 afterEvaluate {
     tasks.named("uploadCrashlyticsMappingFileRelease")
         .configure { enabled = false }
+}
+
+afterEvaluate {
+    tasks.named("bundleRelease").configure {
+        finalizedBy("removeProguardMap")
+    }
+}
+
+tasks.register("removeProguardMap") {
+    doLast {
+        val generatedAabPath = "${projectDir}/release"
+        val aabFile = file("${generatedAabPath}/app-release.aab")
+
+
+        val zipFile = file("${generatedAabPath}/app-release.zip")
+        val savedProguardMapFile = file("${generatedAabPath}/proguard.map")
+        val tempZipFilePath = file("${generatedAabPath}/app-release-temp.zip")
+        val targetFilePath = "BUNDLE-METADATA/com.android.tools.build.obfuscation/proguard.map"
+
+
+        aabFile.renameTo(zipFile)
+
+
+        val zf = ZipFile(zipFile)
+        val zos = ZipOutputStream(tempZipFilePath.outputStream())
+        try {
+            val entries = zf.entries()
+            while (entries.hasMoreElements()) {
+                val entry = entries.nextElement() as ZipEntry
+                if (entry.name != targetFilePath) {
+                    zos.putNextEntry(ZipEntry(entry.name))
+                    zf.getInputStream(entry).use { it.copyTo(zos) }
+                    zos.closeEntry()
+                } else {
+                    zf.getInputStream(entry).use { input ->
+                        savedProguardMapFile.outputStream().use { input.copyTo(it) }
+                    }
+                }
+            }
+        } finally {
+            zos.close()
+            zf.close()
+        }
+
+
+        zipFile.delete()
+        tempZipFilePath.renameTo(aabFile)
+    }
 }

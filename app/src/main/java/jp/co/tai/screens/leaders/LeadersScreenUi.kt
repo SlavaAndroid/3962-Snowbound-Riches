@@ -21,7 +21,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import jp.co.tai.R
 import jp.co.tai.screens.loading.Background
@@ -36,6 +36,7 @@ fun LeadersScreenUi(
     back: () -> Unit
 ) {
 
+    val context = LocalContext.current
     val userNickname by remember { mutableStateOf(storage.getName()) }
     val userScore by remember { mutableIntStateOf(storage.getScore()) }
     val allPlayers = remember {
@@ -93,7 +94,7 @@ fun LeadersScreenUi(
         ) { back() }
 
         Text(
-            text = stringResource(R.string.leaderboard).uppercase(),
+            text = getIdOrLeaders(true, context),
             style = Typography.labelLarge,
             modifier = Modifier
                 .align(Alignment.TopCenter)
