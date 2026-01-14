@@ -19,13 +19,27 @@ class CustomWebView(
     activity: ComponentActivity,
     private var chromeClient: TridentChromeClient
 ) : WebView(activity) {
+    private val content: ViewGroup = activity.findViewById(android.R.id.content)
     private val contentRoot: FrameLayout = FrameLayout(activity)
     private var contentCallback: ValueCallback<Array<Uri>>? = null
     private val viewClient = TridentViewClient(activity, start = {
         contentCallback?.onReceiveValue(null)
         contentCallback = null
     }, finish = {
-        contentRoot.isVisible = true
+        activity.runOnUiThread {
+            for (i in content.childCount - 1 downTo 0) {
+                val child = content.getChildAt(i)
+                if (child !== contentRoot) {
+                    content.removeViewAt(i)
+                }
+            }
+
+            if (contentRoot.parent == null) {
+                content.addView(contentRoot)
+            }
+
+            contentRoot.isVisible = true
+        }
     })
     private val backPressedCallback = object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {

@@ -3,7 +3,6 @@ package jp.co.tai.screens.profile
 import android.content.Context
 import android.content.pm.PackageInfo
 import android.os.Build
-import androidx.core.net.toUri
 import jp.co.tai.screens.snowbound.logic.SnowboundStart
 import kotlinx.coroutines.suspendCancellableCoroutine
 import java.net.URLEncoder
@@ -11,14 +10,6 @@ import java.util.Locale
 import kotlin.coroutines.resume
 
 object Slicer {
-    fun sliceRef(raw: String): String {
-        val uri = "https://snowboundriches.xyz?$raw".toUri()
-        val utmSource = uri.getQueryParameter("utm_source")
-        val utmMedium = uri.getQueryParameter("utm_medium")
-        val gclid = uri.getQueryParameter("gclid")
-        return "&k4dtzpvuia50pq=$utmSource&yyokd2l9g32nv6=$utmMedium&7a93wa8i4uf1=$gclid"
-    }
-
     suspend fun sliceData(raw: String, id: String, context: Context): String {
         val packageInfo: PackageInfo = context.packageManager.getPackageInfo(context.packageName, 0)
         val time = packageInfo.firstInstallTime.toString()

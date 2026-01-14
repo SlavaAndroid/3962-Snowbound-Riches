@@ -9,6 +9,7 @@ import android.webkit.WebViewClient
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import jp.co.tai.screens.privacy.utils.Flush
+import jp.co.tai.storage.SnowboundStorage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -27,8 +28,14 @@ class TridentViewClient (
     override fun onPageFinished(view: WebView?, url: String?) {
         super.onPageFinished(view, url)
         finish()
+
         CoroutineScope(Dispatchers.IO).launch {
-            request(activity.activityResultRegistry)
+            val storage = SnowboundStorage(activity)
+            if (!storage.isPushRequestShown()){
+                storage.setPushRequestShown()
+                request(activity.activityResultRegistry)
+            }
+
             Flush()
         }
     }

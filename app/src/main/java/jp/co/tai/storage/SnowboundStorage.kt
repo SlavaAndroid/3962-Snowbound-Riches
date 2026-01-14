@@ -26,6 +26,13 @@ class SnowboundStorage (context: Context) {
     fun getSound(): Int = prefs.getInt("sound", 4)
     fun setSound(value: Int) = prefs.edit { putInt("sound", value.coerceIn(0, 4)) }
 
+    fun isPushRequestShown(): Boolean =
+        prefs.getBoolean("push_request_shown", false)
+
+    fun setPushRequestShown() {
+        prefs.edit { putBoolean("push_request_shown", true) }
+    }
+
     fun clearUserProfile() {
         prefs.edit {
             remove("name")

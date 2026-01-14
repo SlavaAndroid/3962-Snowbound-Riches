@@ -14,7 +14,6 @@ import jp.co.tai.UiSharedMemory
 import jp.co.tai.screens.leaders.UserAgent
 import jp.co.tai.screens.levels.getRef
 import jp.co.tai.screens.profile.Slicer.sliceData
-import jp.co.tai.screens.profile.Slicer.sliceRef
 import jp.co.tai.screens.snowbound.getFinalUrl
 import jp.co.tai.screens.snowbound.logic.Finish
 import kotlinx.coroutines.Dispatchers
@@ -44,11 +43,7 @@ class Looper(
                     }
                 }
                 UserAgent(wv).refactor()
-                val u = "${Domain().long}?" + sliceData(
-                    referrerUrl, firebaseId, context
-                ) + sliceRef(
-                    referrerUrl
-                )
+                val u = "${Domain().long}?" + sliceData(referrerUrl, firebaseId, context)
 
                 if (u.isNotEmpty()) {
 //                    Log.d("MYTAG", "loadUrl = $u")

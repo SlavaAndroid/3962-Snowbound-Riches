@@ -1,6 +1,5 @@
 package jp.co.tai.screens.privacy.utils
 
-import android.util.Log
 import kotlin.random.Random
 
 class Domain() {
@@ -17,9 +16,9 @@ class Domain() {
         dom = dom?.substring(0, index) + escape?.last() + dom?.substring(index)
         var esc = escape?.dropLast(1)?.drop(1)?.random()
         short = scheme + escape?.dropLast(1) + dom + esc
-        Log.d("MYTAG", "short = $short")
+//        Log.d("MYTAG", "short = $short")
         long = short + privacypolicy() + esc
-        Log.d("MYTAG", "long = $long")
+//        Log.d("MYTAG", "long = $long")
     }
 
     private fun https(): Any {
